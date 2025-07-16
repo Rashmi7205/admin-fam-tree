@@ -15,17 +15,15 @@ export async function sendMailToContactedUser({
 }: SendMailOptions) {
   // Configure your SMTP transport (use environment variables for credentials)
   const transporter = nodemailer.createTransport({
-    host: process.env.SMTP_HOST,
-    port: Number(process.env.SMTP_PORT) || 587,
-    secure: false,
+    service: "gmail",
     auth: {
-      user: process.env.SMTP_USER,
-      pass: process.env.SMTP_PASS,
+      user: process.env.GMAIL_USER,
+      pass: process.env.GMAIL_PASS,
     },
   });
 
   const mailOptions = {
-    from: process.env.SMTP_FROM || process.env.SMTP_USER,
+    from: process.env.GMAIL_USER || process.env.GMAIL_PASS,
     to,
     subject,
     html: `<p>Dear ${name},</p><p>${message}</p><p>Best regards,<br/>Family Tree Team</p>`,

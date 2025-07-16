@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { verify } from "jsonwebtoken";
-import { Admin } from "../models/Admin";
 import { connectToDatabase } from "../mongodb";
+import Admin from "@/models/Admin";
 
 const JWT_SECRET = process.env.JWT_SECRET || "your-secret-key";
 

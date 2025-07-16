@@ -21,13 +21,14 @@ export async function POST(request: NextRequest) {
     await sendMailToContactedUser({
       to: contact.email,
       name: `${contact.firstName} ${contact.lastName}`,
-      subject: `Re: ${contact.subject}`,
+      subject: `Resolved : ${contact.subject}`,
       message,
     });
     // Update status
     await Contact.findByIdAndUpdate(contactId, { status: "replied" });
     return NextResponse.json({ success: true });
   } catch (error) {
+    console.log(error);
     return NextResponse.json(
       { error: "Failed to send reply" },
       { status: 500 }

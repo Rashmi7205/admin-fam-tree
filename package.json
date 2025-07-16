@@ -1,5 +1,5 @@
 {
-  "name": "my-v0-project",
+  "name": "admin-for-family-tree",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -68,6 +68,7 @@
   },
   "devDependencies": {
     "@types/node": "^22",
+    "@types/nodemailer": "^6.4.17",
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "postcss": "^8.5",

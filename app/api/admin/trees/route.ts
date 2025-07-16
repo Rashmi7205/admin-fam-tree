@@ -5,8 +5,8 @@ import User from "@/models/User";
 import { verifyToken } from "@/lib/middleware/auth";
 import { z } from "zod";
 import Member from "@/models/Member";
+import FamilyTree from "@/models/FamilyTree";
 
-const FamilyTree = mongoose.model<IFamilyTree>("FamilyTree");
 
 // Validation schema for tree creation
 const createTreeSchema = z.object({

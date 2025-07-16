@@ -17,6 +17,16 @@ import { Textarea } from "@/components/ui/textarea";
 import { DataTable } from "@/components/ui/data-table";
 import { toast } from "sonner";
 import type { ColumnDef, Row } from "@tanstack/react-table";
+import {
+  Sheet,
+  SheetTrigger,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+  SheetDescription,
+  SheetFooter,
+  SheetClose,
+} from "@/components/ui/sheet";
 
 interface Contact {
   _id: string;
@@ -40,6 +50,10 @@ export default function ContactedUsersPage() {
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
   const [total, setTotal] = useState(0);
+  const [isDetailsSheetOpen, setIsDetailsSheetOpen] = useState(false);
+  const [detailsContact, setDetailsContact] = useState<Contact | null>(null);
+  const [detailsReplyMessage, setDetailsReplyMessage] = useState("");
+  const [detailsReplyLoading, setDetailsReplyLoading] = useState(false);
 
   useEffect(() => {
     fetchContacts();
@@ -120,6 +134,35 @@ export default function ContactedUsersPage() {
     }
   };
 
+  const handleOpenDetails = (contact: Contact) => {
+    setDetailsContact(contact);
+    setDetailsReplyMessage("");
+    setIsDetailsSheetOpen(true);
+  };
+  const handleDetailsSendReply = async () => {
+    if (!detailsContact) return;
+    setDetailsReplyLoading(true);
+    try {
+      const res = await fetch(`/api/admin/contacted/reply`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          contactId: detailsContact._id,
+          message: detailsReplyMessage,
+        }),
+      });
+      if (!res.ok) throw new Error();
+      toast.success("Reply sent");
+      setDetailsReplyMessage("");
+      setIsDetailsSheetOpen(false);
+      fetchContacts();
+    } catch {
+      toast.error("Failed to send reply");
+    } finally {
+      setDetailsReplyLoading(false);
+    }
+  };
+
   // Stats for the top card
   const pendingCount = useMemo(
     () => contacts.filter((c) => c.status === "pending").length,
@@ -185,31 +228,47 @@ export default function ContactedUsersPage() {
       header: "Actions",
       cell: ({ row }: { row: Row<Contact> }) => (
         <div className="flex gap-2">
-          {row.original.status !== "read" && (
+          {/* Toggle Pending/Resolved */}
+          {row.original.status === "pending" ? (
             <Button
               size="sm"
               variant="outline"
               onClick={() => handleMarkAsRead(row.original._id)}
             >
-              Mark as Read
+              Mark as Resolved
+            </Button>
+          ) : (
+            <Button
+              size="sm"
+              variant="outline"
+              onClick={async () => {
+                try {
+                  const res = await fetch(`/api/admin/contacted`, {
+                    method: "PUT",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                      contactId: row.original._id,
+                      status: "pending",
+                    }),
+                  });
+                  if (!res.ok) throw new Error();
+                  toast.success("Marked as pending");
+                  fetchContacts();
+                } catch {
+                  toast.error("Failed to update status");
+                }
+              }}
+            >
+              Mark as Pending
             </Button>
           )}
           <Button
             size="sm"
             variant="outline"
-            onClick={() => handleReply(row.original)}
+            onClick={() => handleOpenDetails(row.original)}
           >
-            Reply
+            View Details
           </Button>
-          {row.original.status !== "archived" && (
-            <Button
-              size="sm"
-              variant="destructive"
-              onClick={() => handleArchive(row.original._id)}
-            >
-              Archive
-            </Button>
-          )}
         </div>
       ),
     },
@@ -217,6 +276,68 @@ export default function ContactedUsersPage() {
 
   return (
     <div className="space-y-6 p-4 md:p-6">
+      {/* Details Sheet */}
+      <Sheet open={isDetailsSheetOpen} onOpenChange={setIsDetailsSheetOpen}>
+        <SheetContent side="right" className="w-full sm:max-w-lg">
+          <SheetHeader>
+            <SheetTitle>
+              {detailsContact
+                ? `Query from ${detailsContact.firstName} ${detailsContact.lastName}`
+                : "Contact Details"}
+            </SheetTitle>
+            <SheetDescription>
+              {detailsContact && (
+                <>
+                  <div className="mb-2">
+                    <b>Email:</b> {detailsContact.email}
+                  </div>
+                  <div className="mb-2">
+                    <b>Subject:</b> {detailsContact.subject}
+                  </div>
+                  <div className="mb-2">
+                    <b>Status:</b> {detailsContact.status}
+                  </div>
+                  <div className="mb-2">
+                    <b>Created:</b>{" "}
+                    {new Date(detailsContact.createdAt).toLocaleString()}
+                  </div>
+                  <div className="mb-2">
+                    <b>Message:</b>
+                    <br />
+                    {detailsContact.message}
+                  </div>
+                </>
+              )}
+            </SheetDescription>
+          </SheetHeader>
+          {/* Reply section in sheet */}
+          {detailsContact && (
+            <>
+              <Textarea
+                value={detailsReplyMessage}
+                onChange={(e) => setDetailsReplyMessage(e.target.value)}
+                placeholder="Type your reply here..."
+                className="min-h-[120px]"
+              />
+              <SheetFooter>
+                <Button
+                  onClick={handleDetailsSendReply}
+                  disabled={!detailsReplyMessage.trim() || detailsReplyLoading}
+                >
+                  Send Reply
+                </Button>
+                <Button
+                  variant="outline"
+                  onClick={() => setIsDetailsSheetOpen(false)}
+                  disabled={detailsReplyLoading}
+                >
+                  Cancel
+                </Button>
+              </SheetFooter>
+            </>
+          )}
+        </SheetContent>
+      </Sheet>
       <Card className="mb-4">
         <CardHeader>
           <CardTitle className="flex gap-4 items-center">
