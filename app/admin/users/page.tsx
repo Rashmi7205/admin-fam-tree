@@ -845,13 +845,13 @@ export default function UsersPage() {
       {/* Header Section */}
       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-bold text-purple-600 dark:text-purple-400 flex items-center gap-2">
-            <Users className="h-8 w-8" /> Users
+          <h1 className="text-3xl font-bold text-foreground flex items-center gap-2">
+            <Users className="h-8 w-8 text-purple-500" /> Users
           </h1>
-          <p className="text-gray-600 dark:text-gray-300 mt-1">
+          <p className="text-muted-foreground mt-1">
             Manage admin and public users
           </p>
-          <div className="mt-2 text-xs text-purple-500 dark:text-purple-300">
+          <div className="mt-2 text-xs text-purple-500">
             Showing users joined from {pagination.page} to {pagination.limit}
           </div>
         </div>
@@ -866,16 +866,16 @@ export default function UsersPage() {
       </div>
 
       {/* Search & Filters */}
-      <Card className="rounded-2xl shadow-md bg-white dark:bg-zinc-900">
-        <CardHeader className="border-b bg-zinc-100 dark:bg-zinc-800 rounded-t-2xl">
-          <CardTitle className="flex items-center gap-2 text-lg font-bold text-purple-600 dark:text-purple-400">
+      <Card className="rounded-2xl shadow-md bg-card">
+        <CardHeader className="border-b bg-muted rounded-t-2xl">
+          <CardTitle className="flex items-center gap-2 text-lg font-bold text-foreground">
             <Filter className="h-5 w-5" /> Search & Filters
           </CardTitle>
         </CardHeader>
         <CardContent className="p-6">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
             <div className="relative">
-              <Search className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
+              <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
               <Input
                 placeholder="Search users..."
                 onChange={(e) => handleSearch(e.target.value)}
@@ -910,11 +910,12 @@ export default function UsersPage() {
       </Card>
 
       {/* Users Table */}
-      <Card className="rounded-2xl shadow-md bg-white dark:bg-zinc-900">
-        <CardHeader className="border-b bg-zinc-100 dark:bg-zinc-800 rounded-t-2xl">
+      <Card className="rounded-2xl shadow-md bg-card">
+        <CardHeader className="border-b bg-muted rounded-t-2xl">
           <div className="flex items-center justify-between">
-            <CardTitle className="flex items-center gap-2 text-lg font-bold text-purple-600 dark:text-purple-400">
-              <Users className="h-5 w-5" /> Users ({pagination.total})
+            <CardTitle className="flex items-center gap-2 text-lg font-bold text-foreground">
+              <Users className="h-5 w-5 text-purple-500" /> Users (
+              {pagination.total})
             </CardTitle>
             <div className="flex gap-2">
               <Button

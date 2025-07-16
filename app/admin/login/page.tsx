@@ -83,11 +83,11 @@ export default function AdminLoginPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50">
-      <div className="max-w-md w-full space-y-8 p-8 bg-white rounded-lg shadow-lg">
+    <div className="min-h-screen flex items-center justify-center bg-background">
+      <div className="max-w-md w-full space-y-8 p-8 bg-card rounded-lg shadow-lg border border-border">
         <div className="text-center">
-          <h2 className="text-3xl font-bold">Admin Login</h2>
-          <p className="mt-2 text-gray-600">
+          <h2 className="text-3xl font-bold text-foreground">Admin Login</h2>
+          <p className="mt-2 text-muted-foreground">
             Sign in to access the admin panel
           </p>
         </div>

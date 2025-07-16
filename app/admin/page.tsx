@@ -68,20 +68,22 @@ export default function AdminDashboard() {
 
   return (
     <div className="space-y-6 p-4 md:p-6">
-      <h1 className="text-3xl font-bold text-purple-600 dark:text-purple-400 mb-4">
+      <h1 className="text-3xl font-bold text-foreground mb-4">
         Admin Dashboard
       </h1>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         <Card className="shadow-md">
           <CardHeader className="flex flex-row items-center justify-between pb-2">
-            <CardTitle className="text-lg font-bold">Users</CardTitle>
+            <CardTitle className="text-lg font-bold text-foreground">
+              Users
+            </CardTitle>
             <Users className="h-8 w-8 text-purple-500" />
           </CardHeader>
           <CardContent>
-            <div className="text-3xl font-bold">
+            <div className="text-3xl font-bold text-foreground">
               {loading ? "-" : stats.users}
             </div>
-            <div className="text-xs text-gray-500 mt-1">
+            <div className="text-xs text-muted-foreground mt-1">
               Total registered users
             </div>
             <Link href="/admin/users">
@@ -96,14 +98,16 @@ export default function AdminDashboard() {
         </Card>
         <Card className="shadow-md">
           <CardHeader className="flex flex-row items-center justify-between pb-2">
-            <CardTitle className="text-lg font-bold">Family Trees</CardTitle>
+            <CardTitle className="text-lg font-bold text-foreground">
+              Family Trees
+            </CardTitle>
             <TreePine className="h-8 w-8 text-green-500" />
           </CardHeader>
           <CardContent>
-            <div className="text-3xl font-bold">
+            <div className="text-3xl font-bold text-foreground">
               {loading ? "-" : stats.trees}
             </div>
-            <div className="text-xs text-gray-500 mt-1">
+            <div className="text-xs text-muted-foreground mt-1">
               Total trees created
             </div>
             <Link href="/admin/trees">
@@ -115,14 +119,16 @@ export default function AdminDashboard() {
         </Card>
         <Card className="shadow-md">
           <CardHeader className="flex flex-row items-center justify-between pb-2">
-            <CardTitle className="text-lg font-bold">Members</CardTitle>
+            <CardTitle className="text-lg font-bold text-foreground">
+              Members
+            </CardTitle>
             <User className="h-8 w-8 text-blue-500" />
           </CardHeader>
           <CardContent>
-            <div className="text-3xl font-bold">
+            <div className="text-3xl font-bold text-foreground">
               {loading ? "-" : stats.members}
             </div>
-            <div className="text-xs text-gray-500 mt-1">
+            <div className="text-xs text-muted-foreground mt-1">
               Total family members
             </div>
             <Link href="/admin/members">
@@ -134,14 +140,18 @@ export default function AdminDashboard() {
         </Card>
         <Card className="shadow-md">
           <CardHeader className="flex flex-row items-center justify-between pb-2">
-            <CardTitle className="text-lg font-bold">Contacted Users</CardTitle>
+            <CardTitle className="text-lg font-bold text-foreground">
+              Contacted Users
+            </CardTitle>
             <Mail className="h-8 w-8 text-pink-500" />
           </CardHeader>
           <CardContent>
-            <div className="text-3xl font-bold">
+            <div className="text-3xl font-bold text-foreground">
               {loading ? "-" : stats.contacts}
             </div>
-            <div className="text-xs text-gray-500 mt-1">Contact requests</div>
+            <div className="text-xs text-muted-foreground mt-1">
+              Contact requests
+            </div>
             <Link href="/admin/contacted">
               <Button variant="link" className="p-0 h-auto text-pink-600 mt-2">
                 View Contacts
@@ -153,26 +163,30 @@ export default function AdminDashboard() {
       <div className="mt-8">
         <Card className="shadow-md">
           <CardHeader className="flex flex-row items-center justify-between pb-2">
-            <CardTitle className="text-lg font-bold flex items-center gap-2">
+            <CardTitle className="text-lg font-bold flex items-center gap-2 text-foreground">
               <Activity className="h-5 w-5 text-purple-500" /> Recent Users
             </CardTitle>
           </CardHeader>
           <CardContent>
             {loading ? (
-              <div className="text-gray-500">Loading...</div>
+              <div className="text-muted-foreground">Loading...</div>
             ) : recent.length === 0 ? (
-              <div className="text-gray-500">No recent users found.</div>
+              <div className="text-muted-foreground">
+                No recent users found.
+              </div>
             ) : (
-              <ul className="divide-y divide-gray-200">
+              <ul className="divide-y divide-border">
                 {recent.map((user: any) => (
                   <li
                     key={user._id}
                     className="py-2 flex flex-col md:flex-row md:items-center md:justify-between"
                   >
-                    <span className="font-medium">
+                    <span className="font-medium text-foreground">
                       {user.displayName || user.email}
                     </span>
-                    <span className="text-xs text-gray-500">{user.email}</span>
+                    <span className="text-xs text-muted-foreground">
+                      {user.email}
+                    </span>
                   </li>
                 ))}
               </ul>
